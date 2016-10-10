@@ -545,6 +545,7 @@ class mod_voucherin extends CI_Controller {
                                     'tempjurnal_jenisjurnal_id' => 1,
                                     'no_dokumen' => $transaksi["no_dokumen"]
                                 );
+
                                 $kredit = $kredit + $value["nilai"];
                             }
                         }

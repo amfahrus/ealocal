@@ -66,7 +66,7 @@
 													<button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
 													<ul class="dropdown-menu">
 														<li><a href="#" id="form_voucherout_kredit_listbukubantu"><i class="cus-table"></i> List</a></li>
-														<li><a href="#" id="form_voucherout_kredit_addbukubantu"><i class="cus-table-add"></i> Add New</a></li>
+														<!--<li><a href="#" id="form_voucherout_kredit_addbukubantu"><i class="cus-table-add"></i> Add New</a></li>-->
 													</ul>
 												</div>
 											</div>
@@ -125,7 +125,7 @@
 													<button data-toggle="dropdown" class="btn dropdown-toggle"><span class="caret"></span></button>
 													<ul class="dropdown-menu">
 														<li><a href="#" class="form_voucherout_debet_listbukubantu" onclick="thisrow=1;getDebetListBukuBantu();" id="form_voucherout_debet_listbukubantu_1"><i class="cus-table"></i> List</a></li>
-														<li><a href="#" class="form_voucherout_debet_addbukubantu" onclick="thisrow=1;getDebetAddBukuBantu();" id="form_voucherout_debet_addbukubantu_1"><i class="cus-table-add"></i> Add New</a></li>
+														<!--<li><a href="#" class="form_voucherout_debet_addbukubantu" onclick="thisrow=1;getDebetAddBukuBantu();" id="form_voucherout_debet_addbukubantu_1"><i class="cus-table-add"></i> Add New</a></li>-->
 													</ul>
 												</div>
 											</div>
@@ -270,7 +270,7 @@
 													+"<button data-toggle=\"dropdown\" class=\"btn dropdown-toggle\"><span class=\"caret\"></span></button>"
 													+"<ul class=\"dropdown-menu\">"
 														+"<li><a href=\"#\" onclick=\"thisrow="+rowCount+";getDebetListBukuBantu();\" class=\"form_voucherout_debet_listbukubantu\" id=\"form_voucherout_debet_listbukubantu_"+rowCount+"\"><i class=\"cus-table\"></i> List</a></li>"
-														+"<li><a href=\"#\" onclick=\"thisrow="+rowCount+";getDebetAddBukuBantu();\" class=\"form_voucherout_debet_addbukubantu\" id=\"form_voucherout_debet_addbukubantu_"+rowCount+"\"><i class=\"cus-table-add\"></i> Add New</a></li>"
+														+"<!--<li><a href=\"#\" onclick=\"thisrow="+rowCount+";getDebetAddBukuBantu();\" class=\"form_voucherout_debet_addbukubantu\" id=\"form_voucherout_debet_addbukubantu_"+rowCount+"\"><i class=\"cus-table-add\"></i> Add New</a></li>-->"
 													+"</ul>"
 												+"</div>"
 											+"</div>"
