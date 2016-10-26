@@ -1018,7 +1018,10 @@
             $('input[name="form_voucherin_debet"]').autocomplete("option", {
                 source: root + "mod_kdperkiraan/autocomplete_kodeperkiraan?_search=true&cat=" + cat
             });
-            form_voucherin_clear();
+
+            $('input[name="form_voucherin_debet_bukubantu"]').val("");
+            $('#form_voucherin_debet_bukubantu_area').hide();
+            //form_voucherin_clear();
         });
 
 

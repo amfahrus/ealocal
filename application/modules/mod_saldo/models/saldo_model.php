@@ -1,6 +1,6 @@
 <?php
 
-class voucherin_model extends CI_Model {
+class saldo_model extends CI_Model {
 
     protected $_table;
     protected $_countAll;
@@ -31,16 +31,16 @@ class voucherin_model extends CI_Model {
         }
     }
 
-	public function InsertJurnal($data){
+    public function InsertJurnal($data){
 		$this->db->trans_begin();
 
-		$this->db->insert_batch('tbl_tempjurnal', $data);
+		$this->db->insert_batch('saldo_awal_detail', $data);
 
         $this->dataset_db->insert_logs(
 										array(
 											'log_username' => $this->session->userdata('ba_username'),
 											'log_node' => $_SERVER['REMOTE_ADDR'],
-											'log_description' => 'User menambahkan jurnal voucher in',
+											'log_description' => 'User menambahkan data saldo awal',
 											'log_params' => json_encode($data)
 										)
 									  );
@@ -56,16 +56,16 @@ class voucherin_model extends CI_Model {
 		}
 	}
 
-	public function deleteJurnal($nobukti){
+	public function deleteJurnal($id){
 
-		$this->db->where_in('nobukti', $nobukti);
-		$this->db->delete('tbl_tempjurnal');
+		$this->db->where_in('saldo_awal_id', $id);
+		$this->db->delete('saldo_awal_detail');
         $this->dataset_db->insert_logs(
 										array(
 											'log_username' => $this->session->userdata('ba_username'),
 											'log_node' => $_SERVER['REMOTE_ADDR'],
-											'log_description' => 'User menghapus jurnal',
-											'log_params' => json_encode(array('nobukti' => $nobukti))
+											'log_description' => 'User menghapus data saldo awal',
+											'log_params' => json_encode(array('saldo_awal_id' => $id))
 										)
 									  );
 
@@ -112,42 +112,24 @@ class voucherin_model extends CI_Model {
             }
         }
 
-        $this->db->from('listjurnal_v');
+        $this->db->from('saldoawal_v');
         $this->db->where('id_proyek', $idproyek);
-        $this->db->where('tempjurnal_jenisjurnal_id', 1);
         $this->_countAll = $this->db->count_all_results();
-        $this->db->select('kdperkiraan, coa, rekanan, id_proyek, kode_proyek, nama_proyek, id_tempjurnal, tanggal_format, nobukti, no_dokumen, dperkir_id, keterangan, volume, dk, debit, kredit, isapprove, gid');
+        $this->db->select('saldo_awal_id, dperkir_id, coa, keterangan, bukubantu, debet, kredit');
         $this->db->order_by($sidx, $sord);
-        $this->db->order_by('dk', 'asc');
         $this->db->limit($limit, $offset);
-        $query = $this->db->get('listjurnal_v');
+        $query = $this->db->get('saldoawal_v');
         $this->db->flush_cache();
 
         $this->dataset_db->insert_logs(
 										array(
 											'log_username' => $this->session->userdata('ba_username'),
 											'log_node' => $_SERVER['REMOTE_ADDR'],
-											'log_description' => 'User menampilkan jurnal voucher in',
+											'log_description' => 'User menampilkan data saldo awal',
 											'log_params' => json_encode($cari)
 										)
 									  );
-        $temp_result = array();
-        foreach ($query->result_array() as $row) {
-            $temp_result[$row["nobukti"]]["tanggal"] = $row["tanggal_format"];
-            $temp_result[$row["nobukti"]]["nobukti"] = $row["nobukti"];
-            $temp_result[$row["nobukti"]]["no_dokumen"] = $row["no_dokumen"];
-            $temp_result[$row["nobukti"]]["id_proyek"] = $row["nama_proyek"];
-            $temp_result[$row["nobukti"]]["gid"] = $row["gid"];
-            $temp_result[$row["nobukti"]]["detail"][$row["id_tempjurnal"]]["id_tempjurnal"] = $row["id_tempjurnal"];
-            $temp_result[$row["nobukti"]]["detail"][$row["id_tempjurnal"]]["id_proyek"] = $row["nama_proyek"];
-            $temp_result[$row["nobukti"]]["detail"][$row["id_tempjurnal"]]["kdperkiraan"] = $row["kdperkiraan"];
-            $temp_result[$row["nobukti"]]["detail"][$row["id_tempjurnal"]]["kdnasabah"] = $row["rekanan"];
-            $temp_result[$row["nobukti"]]["detail"][$row["id_tempjurnal"]]["keterangan"] = $row["keterangan"];
-            $temp_result[$row["nobukti"]]["detail"][$row["id_tempjurnal"]]["volume"] = $row["volume"];
-            $temp_result[$row["nobukti"]]["detail"][$row["id_tempjurnal"]]["debet"] = $row["debit"];
-            $temp_result[$row["nobukti"]]["detail"][$row["id_tempjurnal"]]["kredit"] = $row["kredit"];
-            $temp_result[$row["nobukti"]]["detail"][$row["id_tempjurnal"]]["is_approved"] = $row["isapprove"];
-        }
+        $temp_result = $query->result_array();
         return $temp_result;
     }
 
@@ -159,64 +141,29 @@ class voucherin_model extends CI_Model {
         if (!empty($data) and is_array($data) and count($data) <> 0) {
             $no = 1;
             $temp_result = array();
-            foreach ($data as $key => $value) {
-                $check = 0;
-                foreach ($value["detail"] as $key => $value2) {
-                    if ($check < 1 and $check == 0) {
-						$edit = $value2["is_approved"] == "FALSE" ? '<a class="link_edit" href="#" onclick="edit_jurnal(\'' . $value["nobukti"] . '\');"><img src="' . base_url() . 'media/edit.png" /></a>' : '#' ;
-						$checkbox = $value2["is_approved"] == "FALSE" ? "<input type=\"checkbox\" value=\"" . $value["nobukti"] . "\" name=\"jq_checkbox_added[]\" class=\"jq_checkbox_added\" />" : "" ;
-						$temp_result[] = array(
-                            "no" => $no,
-                            "check" => $checkbox,
-                            "flag" => $edit,
-                            "tanggal" => $value["tanggal"],
-                            "nomor_bukti" => $value["nobukti"],
-                            "nomor_dokumen" => $value["no_dokumen"],
-                            "kode_proyek" => $value["id_proyek"],
-                            "coa" => $value2["kdperkiraan"],
-                            "rekanan" => $value2["kdnasabah"],
-                            "keterangan" => $value2["keterangan"],
-                            "volume" => $value2["volume"],
-                            "debet" => myFormatMoney($value2["debet"]),
-                            "kredit" => myFormatMoney($value2["kredit"]),
-                            "is_approved" => $value2["is_approved"]
-                        );
-                    } else {
-                        $temp_result[] = array(
-                            "no" => "",
-                            "check" => "",
-                            "flag" => "",
-                            "tanggal" => "",
-                            "nomor_bukti" => "",
-                            "nomor_dokumen" => "",
-                            "kode_proyek" => "",
-                            "coa" => $value2["kdperkiraan"],
-                            "rekanan" => $value2["kdnasabah"],
-                            "keterangan" => $value2["keterangan"],
-                            "volume" => $value2["volume"],
-                            "debet" => myFormatMoney($value2["debet"]),
-                            "kredit" => myFormatMoney($value2["kredit"]),
-                            "is_approved" => $value2["is_approved"]
-                        );
-                    }
-                    $check++;
-                }
+            foreach ($data as $row) {
+                $checkbox = "<input type=\"checkbox\" value=\"" . $row["saldo_awal_id"] . "\" name=\"jq_checkbox_added[]\" class=\"jq_checkbox_added\" />";
+				$temp_result[] = array(
+					"no" => $no,
+					"id" => $row["saldo_awal_id"],
+					"check" => $checkbox,
+					"coa" => $row["coa"],
+					"keterangan" => $row["keterangan"],
+					"bukubantu" => $row["bukubantu"],
+					"debet" => myFormatMoney($row["debet"]),
+					"kredit" => myFormatMoney($row["kredit"])
+				);
                 $no++;
             }
             return $temp_result;
         }
     }
 
-    public function get_nobukti($nomor_bukti) {
-		$userconfig = $this->dataset_db->getUserconfig($this->session->userdata('ba_user_id'));
-		$proyek = $userconfig["kolom2"];
+    public function get_saldoawal($saldo_awal_id) {
         $this->db->select("*");
-        $this->db->from("listjurnal_v");
-        $this->db->where("nobukti", $nomor_bukti);
-        $this->db->where("id_proyek", $proyek);
-        $this->db->order_by("gid", "asc");
-        $this->db->order_by("dk", "asc");
-        $this->db->order_by("id_tempjurnal", "asc");
+        $this->db->from("saldoawal_v");
+        $this->db->where("saldo_awal_id", $saldo_awal_id);
+        $this->db->order_by("saldo_awal_id", "asc");
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
@@ -298,59 +245,44 @@ class voucherin_model extends CI_Model {
         return $temp_result;
     }
 
-	public function getIdProyek($kode_proyek) {
-        $this->db->select("id_proyek");
-        $this->db->from("list_proyek_v");
-        $this->db->where("kode_proyek", $kode_proyek);
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            $row = $query->row_array();
-            return $row['id_proyek'];
-        } else {
-            return false;
+    public function upload($data){
+        $jurnal = array();
+        $i=0;
+        foreach ($data as $key => $value) {
+          $jurnal[] = array(
+              'id_proyek' => $value["id_proyek"],
+              'period_key' => $value["period_key"],
+              'dperkir_id' => $this->getIdPerkir($value["id_proyek"],(string)$value["kode_perkiraan"]),
+              'keterangan' => $value["keterangan"],
+              'debet' => $value["debet"],
+              'kredit' => $value["kredit"],
+              'kdnasabah' =>  $value["kdnasabah"],
+              'kdsbdaya' =>  $value["kdsbdaya"]
+          );
+          $i++;
         }
+        //die(print_r($jurnal));
+        $this->InsertJurnal($jurnal);
     }
 
-    public function getKodeProyek($id_proyek) {
-        $this->db->select("kode_proyek");
-        $this->db->from("list_proyek_v");
-        $this->db->where("id_proyek", $id_proyek);
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            $row = $query->row_array();
-            return $row['kode_proyek'];
-        } else {
-            return false;
-        }
+    private function getIdPerkir($idproyek,$kdperkiraan){
+      //$jenis = $this->getJenis($idproyek);
+      $this->db->select('dperkir_id');
+      $this->db->from($this->_table['tbl_dperkir']);
+      $this->db->where("kdperkiraan",$kdperkiraan);
+      //$this->db->where("dperkir_jenis_id",$jenis["dperkir_jenis_id"]);
+      $query = $this->db->get();
+      $dperkir = $query->row_array();
+      return $dperkir["dperkir_id"];
+
     }
 
-    public function getKatProyek($kode_proyek) {
-        $this->db->select("id_katproyek");
-        $this->db->from("list_proyek_v");
-        $this->db->where("kode_proyek", $kode_proyek);
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            $row = $query->row_array();
-            return $row['id_katproyek'];
-        } else {
-            return false;
-        }
-    }
+    private function getJenis($idproyek){
+      $this->db->select('dperkir_jenis_id');
+      $this->db->from($this->_table['tbl_proyek']);
+      $this->db->where("id_proyek",$idproyek);
+      $query = $this->db->get();
+      return $query->row_array();
 
-    public function getOnlineProyek($kode_proyek) {
-        $this->db->select("is_online");
-        $this->db->from("tbl_proyek");
-        $this->db->where("kode_proyek", $kode_proyek);
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            $row = $query->row_array();
-            if ($row['is_online'] == 't') {
-				return true;
-			} else {
-				return false;
-			}
-        } else {
-            return false;
-        }
     }
 }

@@ -192,20 +192,20 @@ class mod_vouchermem extends CI_Controller {
 		foreach($kredit_id as $arr){
 			$this->form_validation->set_rules("debet_id[$j][value]", "Id Debet ke $u", "required");
 			$this->form_validation->set_rules("debet_kode[$j][value]", "Kode Debet ke $u", "required");
-			if(((!empty($is_rekanan_debet[$j]["value"]) && $is_rekanan_debet[$j]["value"] == 't')
+			/*if(((!empty($is_rekanan_debet[$j]["value"]) && $is_rekanan_debet[$j]["value"] == 't')
 				|| (!empty($is_sbdaya_debet[$j]["value"]) && $is_sbdaya_debet[$j]["value"] == 't')
 				|| (!empty($is_proyek_debet[$j]["value"]) && $is_proyek_debet[$j]["value"] == 't'))
 				&& empty($debet_bukubantu[$j]["value"])){
 				$this->form_validation->set_rules("debet_bukubantu[$j][value]", "Buku Bantu Debet ke $u", "required");
-			}
+			}*/
 			$this->form_validation->set_rules("kredit_id[$j][value]", "Id Kredit ke $u", "required");
 			$this->form_validation->set_rules("kredit_kode[$j][value]", "Kode Kredit ke $u", "required");
-			if(((!empty($is_rekanan_kredit[$j]["value"]) && $is_rekanan_kredit[$j]["value"] == 't')
+			/*if(((!empty($is_rekanan_kredit[$j]["value"]) && $is_rekanan_kredit[$j]["value"] == 't')
 				|| (!empty($is_sbdaya_kredit[$j]["value"]) && $is_sbdaya_kredit[$j]["value"] == 't')
 				|| (!empty($is_proyek_kredit[$j]["value"]) && $is_proyek_kredit[$j]["value"] == 't'))
 				&& empty($kredit_bukubantu[$j]["value"])){
 				$this->form_validation->set_rules("kredit_bukubantu[$j][value]", "Buku Bantu Kredit ke $u", "required");
-			}
+			}*/
 			$this->form_validation->set_rules("keterangan[$j][value]", "Keterangan ke $u", "required");
 			$this->form_validation->set_rules("nilai[$j][value]", "Nilai ke $u", "required");
 			$j++;
@@ -501,9 +501,10 @@ class mod_vouchermem extends CI_Controller {
             $jurnal_hutangkso = array();
 			$debet = 0;
 			$kredit = 0;
-			$dperkir_alokasi = array(557,558,559,560);
+      $dperkir_alokasi = $this->vouchermem_model->getKodeAlokasi();
+			/*$dperkir_alokasi = array(557,558,559,560);
 			$dperkir_piutangkso = array(113,114,115,116);
-			$dperkir_hutangkso = array(485,486,487,488);
+			$dperkir_hutangkso = array(485,486,487,488);*/
 			//$dperkir_alokasi = array(560);
 			$is_alokasi = false;
 			$idproyek_alokasi = '';
@@ -564,6 +565,53 @@ class mod_vouchermem extends CI_Controller {
 								}
 							}
 					}
+					foreach($jurnal as $key => $val){
+						$idproyek_alokasi = $this->vouchermem_model->getIdProyek($val["kdnasabah"]);
+                        $is_proyek_online = $this->vouchermem_model->getOnlineProyek($val["kdnasabah"]);
+						$kat_proyek = $this->vouchermem_model->getKatProyek($val["kdnasabah"]);
+						//Otomatisasi RK Debet
+						if($val["dk"] == "D" && in_array($val["dperkir_id"], $dperkir_alokasi) and (strpos($val["nobukti"], 'HTS')) === false and (strpos($val["nobukti"], 'PUS')) === false and (strpos($val["nobukti"], 'RKS')) === false && $is_proyek_online){
+							$jurnal_alokasi[] = array(
+								'tanggal' => $val["tanggal"],
+								'nobukti' => "RK".$val["nobukti"],
+								'dperkir_id' => $val["dperkir_id"],
+								'id_proyek' => $idproyek_alokasi,
+								'kdnasabah' => $kdnasabah_alokasi,
+								'keterangan' => $val["keterangan"],
+								'dk' => 'K',
+								'is_delete' => 't',
+								'rupiah' => $val["rupiah"] * -1,
+								'create_id' => $val["create_id"],
+								'create_time' => $val["create_time"],
+								'gid' => $val["gid"],
+								'tempjurnal_jenisjurnal_id' => 1,
+								'no_dokumen' => $val["no_dokumen"]
+							);
+							$this->vouchermem_model->deleteJurnal("RK".$val["nobukti"]);
+						}
+
+						//Otomatisasi RK Kredit
+						if($val["dk"] == "K" && in_array($val["dperkir_id"], $dperkir_alokasi) and (strpos($val["nobukti"], 'HTS')) === false and (strpos($val["nobukti"], 'PUS')) === false and (strpos($val["nobukti"], 'RKS')) === false && $is_proyek_online){
+							$jurnal_alokasi[] = array(
+								'tanggal' => $val["tanggal"],
+								'nobukti' => "RK".$val["nobukti"],
+								'dperkir_id' => $val["dperkir_id"],
+								'id_proyek' => $idproyek_alokasi,
+								'kdnasabah' => $kdnasabah_alokasi,
+								'keterangan' => $val["keterangan"],
+								'dk' => 'D',
+								'is_delete' => 't',
+								'rupiah' => $val["rupiah"] * 1,
+								'create_id' => $val["create_id"],
+								'create_time' => $val["create_time"],
+								'gid' => $val["gid"],
+								'tempjurnal_jenisjurnal_id' => 1,
+								'no_dokumen' => $val["no_dokumen"]
+							);
+							$this->vouchermem_model->deleteJurnal("RK".$val["nobukti"]);
+						}
+
+					}
 					if (($kredit === $debet)) {
 						$insert = $this->vouchermem_model->InsertJurnal($jurnal);
 							if($insert){
@@ -572,6 +620,15 @@ class mod_vouchermem extends CI_Controller {
 							} else {
 								$data['error'] = '<p>Terjadi kesalahan di database</p>';
 							}
+						/*if(count($jurnal_alokasi)){
+							$insert_alokasi = $this->vouchermem_model->InsertJurnal($jurnal_alokasi);
+								if($insert_alokasi){
+									$this->cleanTransaksi();
+									$data['success'] = '<p>Jurnal Alokasi '.$transaksi["no_dokumen"].' berhasil disimpan dengan nomor bukti : '.$nobukti.'</p>';
+								} else {
+									$data['error'] = '<p>Terjadi kesalahan alokasi di database</p>';
+								}
+						}*/
 					} else {
 						$data['error'] = '<p>Debet Dan Kredit Tidak Sama</p>';
 					}

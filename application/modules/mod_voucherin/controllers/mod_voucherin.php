@@ -205,16 +205,16 @@ class mod_voucherin extends CI_Controller {
         $this->form_validation->set_rules("jenis", "jenis", "required");
         $this->form_validation->set_rules("debet_id", "Id Debet", "required");
         $this->form_validation->set_rules("debet_kode", "Kode Debet", "required");
-        $this->form_validation->set_rules("debet_bukubantu", "Buku Bantu Debet", "");
+        //$this->form_validation->set_rules("debet_bukubantu", "Buku Bantu Debet", "");
         $this->form_validation->set_rules("no_dokumen", "Nomor Dokumen", "required");
         $j = 0;
         $u = 1;
         foreach ($kredit_id as $arr) {
             $this->form_validation->set_rules("kredit_id[$j][value]", "Id Kredit ke $u", "required");
             $this->form_validation->set_rules("kredit_kode[$j][value]", "Kode Kredit ke $u", "required");
-			if((!empty($is_rekanan_kredit[$j]["value"]) || !empty($is_sbdaya_kredit[$j]["value"]) || !empty($is_proyek_kredit[$j]["value"])) && empty($kredit_bukubantu[$j]["value"])){
-				$this->form_validation->set_rules("kredit_bukubantu[$j][value]", "Buku Bantu Kredit ke $u", "required");
-			}
+      			/*if((!empty($is_rekanan_kredit[$j]["value"]) || !empty($is_sbdaya_kredit[$j]["value"]) || !empty($is_proyek_kredit[$j]["value"])) && empty($kredit_bukubantu[$j]["value"])){
+      				$this->form_validation->set_rules("kredit_bukubantu[$j][value]", "Buku Bantu Kredit ke $u", "required");
+      			}*/
             $this->form_validation->set_rules("keterangan[$j][value]", "Keterangan ke $u", "required");
             $this->form_validation->set_rules("nilai[$j][value]", "Nilai ke $u", "required");
             $j++;
@@ -485,9 +485,12 @@ class mod_voucherin extends CI_Controller {
             $jurnal_hutangkso = array();
 			$debet = 0;
 			$kredit = 0;
-			$dperkir_alokasi = array(557,558,559,560);
+			$dperkir_alokasi = $this->voucherin_model->getKodeAlokasi();
+			$dperkir_piutangkso = array();
+			$dperkir_hutangkso = array();
+			/*$dperkir_alokasi = array(557,558,559,560);
 			$dperkir_piutangkso = array(113,114,115,116);
-			$dperkir_hutangkso = array(485,486,487,488);
+			$dperkir_hutangkso = array(485,486,487,488);*/
 			//$dperkir_alokasi = array(560);
 			$is_alokasi = false;
 			$idproyek_alokasi = '';
@@ -560,6 +563,15 @@ class mod_voucherin extends CI_Controller {
                         } else {
                             $data['error'] = '<p>Terjadi kesalahan di database</p>';
                         }
+                        /*if(count($jurnal_alokasi)){
+							$insert_alokasi = $this->voucherin_model->InsertJurnal($jurnal_alokasi);
+								if($insert_alokasi){
+									$this->cleanTransaksi();
+									$data['success'] = '<p>Jurnal Alokasi '.$transaksi["no_dokumen"].' berhasil disimpan dengan nomor bukti : '.$nobukti.'</p>';
+								} else {
+									$data['error'] = '<p>Terjadi kesalahan alokasi di database</p>';
+								}
+						}*/
                     } else {
                         $data['error'] = '<p>Debet Dan Kredit Tidak Sama</p>';
                     }

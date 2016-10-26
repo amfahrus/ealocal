@@ -1015,7 +1015,10 @@
             $('input[name="form_voucherout_kredit"]').autocomplete("option", {
                 source: root + "mod_kdperkiraan/autocomplete_kodeperkiraan?_search=true&cat=" + cat
             });
-            form_voucherout_clear();
+
+            $('input[name="form_voucherout_kredit_bukubantu"]').val("");
+            $('#form_voucherout_kredit_bukubantu_area').hide();
+            //form_voucherout_clear();
         });
 
 

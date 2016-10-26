@@ -31,6 +31,23 @@ class voucherout_model extends CI_Model {
         }
     }
 
+  public function getKodeAlokasi() {
+        $gname = array("HUBUNGAN REKENING KORAN","ASET VENTURA BERSAMA");
+        $this->db->select("a.dperkir_id");
+        $this->db->from("tbl_dperkir a");
+        $this->db->join("tbl_dperkir_group_relasi b","a.dperkir_id = b.dperkir_id","LEFT");
+        $this->db->join("tbl_dperkir_group c","b.dperkir_group_id = c.dperkir_group_id","LEFT");
+        $this->db->where_in("c.gname", $gname);
+        $query = $this->db->get();
+        $tmp_result = array();
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $row) {
+                $tmp_result[] = $row['dperkir_id'];
+            }
+        }
+        return $tmp_result;
+  }
+
 	public function InsertJurnal($data){
 		$this->db->trans_begin();
 
@@ -55,12 +72,12 @@ class voucherout_model extends CI_Model {
 			return true;
 		}
 	}
-	
-	
+
+
 	public function deleteJurnal($nobukti){
 
 		$this->db->where_in('nobukti', $nobukti);
-		$this->db->delete('tbl_tempjurnal'); 
+		$this->db->delete('tbl_tempjurnal');
         $this->dataset_db->insert_logs(
 										array(
 											'log_username' => $this->session->userdata('ba_username'),
@@ -71,7 +88,7 @@ class voucherout_model extends CI_Model {
 									  );
 
 	}
-	
+
 	public function getJurnal($idproyek, $limit, $offset, $sidx, $sord, $cari, $search = "false") {
 
         if (!is_array($cari))
@@ -207,7 +224,7 @@ class voucherout_model extends CI_Model {
             return $temp_result;
         }
     }
-    
+
     public function get_nobukti($nomor_bukti) {
         $userconfig = $this->dataset_db->getUserconfig($this->session->userdata('ba_user_id'));
         $proyek = $userconfig["kolom2"];
@@ -298,7 +315,7 @@ class voucherout_model extends CI_Model {
         }
         return $temp_result;
     }
-    
+
 	public function getIdProyek($kode_proyek) {
         $this->db->select("id_proyek");
         $this->db->from("list_proyek_v");
@@ -311,7 +328,7 @@ class voucherout_model extends CI_Model {
             return false;
         }
     }
-    
+
     public function getKodeProyek($id_proyek) {
         $this->db->select("kode_proyek");
         $this->db->from("list_proyek_v");
@@ -324,7 +341,7 @@ class voucherout_model extends CI_Model {
             return false;
         }
     }
-    
+
     public function getKatProyek($kode_proyek) {
         $this->db->select("id_katproyek");
         $this->db->from("list_proyek_v");
@@ -337,7 +354,7 @@ class voucherout_model extends CI_Model {
             return false;
         }
     }
-    
+
     public function getOnlineProyek($kode_proyek) {
         $this->db->select("is_online");
         $this->db->from("tbl_proyek");
@@ -346,7 +363,7 @@ class voucherout_model extends CI_Model {
         if ($query->num_rows() > 0) {
             $row = $query->row_array();
             if ($row['is_online'] == 't') {
-				return true;	
+				return true;
 			} else {
 				return false;
 			}

@@ -187,16 +187,16 @@ class mod_voucherout extends CI_Controller {
         $this->form_validation->set_rules("no_dokumen", "Nomor Dokumen", "required");
         $this->form_validation->set_rules("kredit_id", "Id Kredit", "required");
         $this->form_validation->set_rules("kredit_kode", "Kode Kredit", "required");
-        $this->form_validation->set_rules("kredit_bukubantu", "Buku Bantu Kredit", "");
+        //$this->form_validation->set_rules("kredit_bukubantu", "Buku Bantu Kredit", "");
 
 		$j = 0;
 		$u = 1;
 		foreach($debet_id as $arr){
 			$this->form_validation->set_rules("debet_id[$j][value]", "Id Debet ke $u", "required");
 			$this->form_validation->set_rules("debet_kode[$j][value]", "Kode Debet ke $u", "required");
-			if((!empty($is_rekanan_debet[$j]["value"]) || !empty($is_sbdaya_debet[$j]["value"]) || !empty($is_proyek_debet[$j]["value"])) && empty($debet_bukubantu[$j]["value"])){
+			/*if((!empty($is_rekanan_debet[$j]["value"]) || !empty($is_sbdaya_debet[$j]["value"]) || !empty($is_proyek_debet[$j]["value"])) && empty($debet_bukubantu[$j]["value"])){
 				$this->form_validation->set_rules("debet_bukubantu[$j][value]", "Buku Bantu Debet ke $u", "required");
-			}
+			}*/
 			$this->form_validation->set_rules("keterangan[$j][value]", "Keterangan ke $u", "required");
 			$this->form_validation->set_rules("nilai[$j][value]", "Nilai ke $u", "required");
 			$j++;
@@ -470,9 +470,10 @@ class mod_voucherout extends CI_Controller {
             $jurnal_hutangkso = array();
 			$debet = 0;
 			$kredit = 0;
-			$dperkir_alokasi = array(557,558,559,560);
+      $dperkir_alokasi = $this->voucherout_model->getKodeAlokasi();
+			/*$dperkir_alokasi = array(557,558,559,560);
 			$dperkir_piutangkso = array(113,114,115,116);
-			$dperkir_hutangkso = array(485,486,487,488);
+			$dperkir_hutangkso = array(485,486,487,488);*/
 			//$dperkir_alokasi = array(560);
 			$is_alokasi = false;
 			$idproyek_alokasi = '';
@@ -512,6 +513,32 @@ class mod_voucherout extends CI_Controller {
 										'tempjurnal_jenisjurnal_id' => 2,
 										'no_dokumen' => $transaksi["no_dokumen"]
 									);
+									$is_proyek_online = $this->voucherout_model->getOnlineProyek($v["kdnasabah"]);
+									$kat_proyek = $this->voucherout_model->getKatProyek($v["kdnasabah"]);
+
+									// Otomatisasi RK
+									if(in_array($v["dperkir_id"], $dperkir_alokasi) and (strpos($nobukti, 'HTS')) === false and (strpos($nobukti, 'PUS')) === false and (strpos($nobukti, 'RKS')) === false and $is_proyek_online){
+										//$is_alokasi = true;
+										$idproyek_alokasi = $this->voucherout_model->getIdProyek($v["kdnasabah"]);
+										$jurnal_alokasi[] = array(
+											'tanggal' => $transaksi["tanggal"],
+											'nobukti' => "RK".$nobukti,
+											'dperkir_id' => $v["dperkir_id"],
+											'id_proyek' => $idproyek_alokasi,
+											'kdnasabah' => $kdnasabah_alokasi,
+											'keterangan' => str_replace("'","`",$value["keterangan"]),
+											'dk' => 'K',
+											'is_delete' => 't',
+											'rupiah' => $value["nilai"] * -1,
+											'create_id' => $this->session->userdata('ba_user_id'),
+											'create_time' => $this->myauth->timestampIndo(),
+											'gid' => $gid,
+											'tempjurnal_jenisjurnal_id' => 1,
+											'no_dokumen' => $transaksi["no_dokumen"]
+										);
+										$this->voucherout_model->deleteJurnal("RK".$nobukti);
+									}
+
 									$debet = $debet + $value["nilai"];
 								} else {
 									$jurnal[] = array(
@@ -543,6 +570,16 @@ class mod_voucherout extends CI_Controller {
 							} else {
 								$data['error'] = '<p>Terjadi kesalahan di database</p>';
 							}
+						/*if(count($jurnal_alokasi)){
+							$insert_alokasi = $this->voucherout_model->InsertJurnal($jurnal_alokasi);
+								if($insert_alokasi){
+									$this->cleanTransaksi();
+									$data['success'] = '<p>Jurnal Alokasi '.$transaksi["no_dokumen"].' berhasil disimpan dengan nomor bukti : '.$nobukti.'</p>';
+								} else {
+									$data['error'] = '<p>Terjadi kesalahan alokasi di database</p>';
+								}
+						}*/
+
 					} else {
 						$data['error'] = '<p>Debet Dan Kredit Tidak Sama</p>';
 					}
