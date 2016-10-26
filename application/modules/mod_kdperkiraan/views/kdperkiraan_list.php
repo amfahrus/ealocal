@@ -14,7 +14,7 @@
             <div id="pager2"></div>
         </div>
     </div>
-    <?= form_close(); ?> 
+    <?= form_close(); ?>
 </div>
 <?= $searchform; ?>
 <script type="text/javascript">
@@ -22,38 +22,38 @@
         var lebar = $('.inbody').height() - 200;
         var panjang = $('.content').width() - 20;
         jQuery("#list2").jqGrid({
-            url: root + 'mod_kdperkiraan/kdperkiraan_json', 
+            url: root + 'mod_kdperkiraan/kdperkiraan_json',
             mtype : "post",
-            datatype: "json", 
-            postData: {csrf_eadev: csrf_hash},
-            colNames:['Kode Akun', 'Nama Akun','Rekanan','SB Daya','Proyek'], 
-            colModel:[ 
-                {name:'kdperkiraan',index:'kdperkiraan', width:150}, 
+            datatype: "json",
+            postData: {csrf_eadev_client: csrf_hash},
+            colNames:['Kode Akun', 'Nama Akun','Rekanan','SB Daya','Proyek'],
+            colModel:[
+                {name:'kdperkiraan',index:'kdperkiraan', width:150},
                 {name:'nmperkiraan',index:'nmperkiraan', width:300},
                 {name:'bukubantu1',index:'bukubantu1', width:100, align:"center"},
                 {name:'bukubantu2',index:'bukubantu2', width:100, align:"center"},
                 {name:'bukubantu3',index:'bukubantu3', width:100, align:"center"}
-            ], 
-            rowNum:20, 
-            width: panjang, 
-            height: lebar, 
-            rownumbers: true, 
+            ],
+            rowNum:20,
+            width: panjang,
+            height: lebar,
+            rownumbers: true,
             rownumWidth: 40,
-            rowList:[20,30,40,50], 
-            pager: '#pager2', 
+            rowList:[20,30,40,50],
+            pager: '#pager2',
             multiselect: true,
-            viewrecords: true, 
+            viewrecords: true,
             shrinkToFit: false
-        }); 
-        
-        jQuery("#list2").jqGrid('setGroupHeaders', { 
-            useColSpanStyle: true, 
+        });
+
+        jQuery("#list2").jqGrid('setGroupHeaders', {
+            useColSpanStyle: true,
             groupHeaders:[
-                {startColumnName: 'bukubantu1', numberOfColumns: 3, titleText: 'Buku Bantu'} 
-            ] 
+                {startColumnName: 'bukubantu1', numberOfColumns: 3, titleText: 'Buku Bantu'}
+            ]
         });
         jQuery("#list2").jqGrid('navGrid','#pager2',{edit:false,add:false,del:false,search:false});
-        
+
         $('#button_search').click(function () {
             var str = $("form").serialize();
             var search = "_search=true&"+ str;
@@ -62,7 +62,7 @@
                 page:1
             }).trigger("reloadGrid");
         });
-        
+
         $("#reset_search").click(function() {
             $('.cols_cari').val("");
             $('.ops_cari').val("");

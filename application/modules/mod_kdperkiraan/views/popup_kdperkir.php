@@ -6,7 +6,7 @@
                 <div class="control-group info">
                     <label class="control-label" for="popup_kodeperkiraan">Kode Perkiraan</label>
                     <div class="controls">
-                        <input type="text" name="popup_kodeperkiraan" id="popup_kodeperkiraan"/> 
+                        <input type="text" name="popup_kodeperkiraan" id="popup_kodeperkiraan"/>
                     </div>
                 </div>
             </div>
@@ -14,7 +14,7 @@
                 <div class="control-group info">
                     <label class="control-label" for="popup_nmperkiraan">Nama Perkiraan</label>
                     <div class="controls">
-                        <input type="text" name="popup_nmperkiraan" id="popup_nmperkiraan"/> 
+                        <input type="text" name="popup_nmperkiraan" id="popup_nmperkiraan"/>
                     </div>
                 </div>
             </div>
@@ -46,28 +46,28 @@
                 page:1
             }).trigger("reloadGrid");
         });
-        
+
         jQuery("#list2").jqGrid({
-            url: root + 'mod_kdperkiraan/popup_json/<?php echo $cat; ?>', 
+            url: root + 'mod_kdperkiraan/popup_json/<?php echo $cat; ?>',
             mtype : "post",
-            datatype: "json", 
-            postData: {csrf_eadev: csrf_hash},
-            colNames:['Id','Kode Perkiraan', 'Nama Perkiraan', 'Sumberdaya', 'Nasabah'], 
-            colModel:[ 
-                {name:'dperkir_id',index:'dperkir_id',width:150, hidden:true}, 
-                {name:'kdperkiraan',index:'kdperkiraan',width:150}, 
-                {name:'nmperkiraan',index:'nmperkiraan', width:300}, 
-                {name:'flag_sumberdaya',index:'flag_sumberdaya', width:100, hidden:true}, 
-                {name:'flag_nasabah',index:'flag_nasabah', width:100, hidden:true}, 
-            ], 
-            rowNum:10, 
-            width: 530, 
-            height: 250, 
-            rownumbers: true, 
+            datatype: "json",
+            postData: {csrf_eadev_client: csrf_hash},
+            colNames:['Id','Kode Perkiraan', 'Nama Perkiraan', 'Sumberdaya', 'Nasabah'],
+            colModel:[
+                {name:'dperkir_id',index:'dperkir_id',width:150, hidden:true},
+                {name:'kdperkiraan',index:'kdperkiraan',width:150},
+                {name:'nmperkiraan',index:'nmperkiraan', width:300},
+                {name:'flag_sumberdaya',index:'flag_sumberdaya', width:100, hidden:true},
+                {name:'flag_nasabah',index:'flag_nasabah', width:100, hidden:true},
+            ],
+            rowNum:10,
+            width: 530,
+            height: 250,
+            rownumbers: true,
             rownumWidth: 40,
-            rowList:[10,20,30], 
-            pager: '#pager2', 
-            viewrecords: true, 
+            rowList:[10,20,30],
+            pager: '#pager2',
+            viewrecords: true,
             shrinkToFit: false,
             onSelectRow: function(id){
                 $.ajax({
@@ -89,7 +89,7 @@
                     }
                 });
             }
-        }); 
+        });
         jQuery("#list2").jqGrid('navGrid','#pager2',{edit:false,add:false,del:false,search:false});
     });
 </script>

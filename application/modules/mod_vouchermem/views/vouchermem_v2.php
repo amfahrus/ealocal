@@ -199,7 +199,7 @@
               is_rekanan_kredit: is_rekanan_kredit,
               is_sbdaya_kredit: is_sbdaya_kredit,
               is_proyek_kredit: is_proyek_kredit,
-              csrf_eadev: csrf_hash,
+              csrf_eadev_client: csrf_hash,
           },
           complete: function() {
             showUrlInDialog(root + 'mod_vouchermem/showFormulir/', "postJurnal", "Memorial", "form_popupformulir", 800, 480);
@@ -345,7 +345,7 @@
         $.ajax({
             url: root + 'mod_vouchermem/getSession',
             dataType: 'json',
-            //data: {csrf_eadev: csrf_hash},
+            //data: {csrf_eadev_client: csrf_hash},
             success: function(json) {
                 $('div.alert').remove();
 
@@ -1040,7 +1040,7 @@
               is_rekanan_kredit: is_rekanan_kredit,
               is_sbdaya_kredit: is_sbdaya_kredit,
               is_proyek_kredit: is_proyek_kredit,
-              csrf_eadev: csrf_hash,
+              csrf_eadev_client: csrf_hash,
           },
           beforeSend: function() {
               $(this).attr('disabled', true);
@@ -1101,7 +1101,7 @@
                 url: root + "mod_vouchermem/addJurnal",
                 dataType: 'json',
                 type: 'post',
-                data: {id: id, csrf_eadev: csrf_hash},
+                data: {id: id, csrf_eadev_client: csrf_hash},
                 beforeSend: function() {
                     $(this).attr('disabled',true);
                 },
@@ -1126,7 +1126,7 @@
 		$('button[name="form_memorial_batal"]').click(function() {
             $.ajax({
                 url: root + "mod_vouchermem/cleanTransaksi",
-                data: {csrf_eadev: csrf_hash}
+                data: {csrf_eadev_client: csrf_hash}
             });
             form_memorial_clear();
         });
@@ -1141,7 +1141,7 @@
                 url: root + "mod_vouchermem/deletejurnal",
                 dataType: 'json',
                 type: 'post',
-                data: {id: id, csrf_eadev: csrf_hash},
+                data: {id: id, csrf_eadev_client: csrf_hash},
                 success: function(json) {
                     $('div.alert').remove();
                     if (json['error']) {

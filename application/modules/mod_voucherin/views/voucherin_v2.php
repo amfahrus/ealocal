@@ -221,7 +221,7 @@
               is_rekanan_kredit: is_rekanan_kredit,
               is_sbdaya_kredit: is_sbdaya_kredit,
               is_proyek_kredit: is_proyek_kredit,
-              csrf_eadev: csrf_hash
+              csrf_eadev_client: csrf_hash
           },
           complete: function() {
             showUrlInDialog(root + 'mod_voucherin/showFormulir/', "postJurnal", "Voucher In", "form_popupformulir", 800, 480);
@@ -907,7 +907,7 @@
               is_rekanan_kredit: is_rekanan_kredit,
               is_sbdaya_kredit: is_sbdaya_kredit,
               is_proyek_kredit: is_proyek_kredit,
-              csrf_eadev: csrf_hash
+              csrf_eadev_client: csrf_hash
           },
           beforeSend: function() {
               $(this).attr('disabled', true);
@@ -1107,7 +1107,7 @@
                 url: root + "mod_voucherin/addJurnal",
                 dataType: 'json',
                 type: 'post',
-                data: {id: id, csrf_eadev: csrf_hash},
+                data: {id: id, csrf_eadev_client: csrf_hash},
                 beforeSend: function() {
                     $(this).attr('disabled',true);
                 },

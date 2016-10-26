@@ -28,7 +28,7 @@
             dataType: 'json',
             data: {
                 saldo_awal_id: id,
-				csrf_eadev: csrf_hash
+				csrf_eadev_client: csrf_hash
             },
             beforeSend: function() {
                 $(this).attr('disabled', true);
@@ -80,7 +80,7 @@
             url: root + 'mod_saldo/JurnalToJson',
             mtype: "post",
             datatype: "json",
-            postData: {csrf_eadev: csrf_hash},
+            postData: {csrf_eadev_client: csrf_hash},
             colNames: ['No', "<div id='jq_checkbox_head_added'><div>", 'Kode Perkiraan', 'Uraian', 'Rekanan / Sbdaya', 'Debet', 'Kredit'],
             colModel: [
                 {name: 'no', index: 'id_jurnal', width: 25, sortable: false, align: "center"},
@@ -122,10 +122,10 @@
                 });
             }
         });
-        
+
         $('#form_saldoawal_delete').click(function() {
 			if (confirm('Apakah anda yakin untuk menghapus data tersebut?')) {
-    
+
 				var id = $('input[class="jq_checkbox_added"]:checked').map(function() {
 					return $(this).val();
 				}).get();
@@ -135,7 +135,7 @@
 					url: root + "mod_saldo/deletejurnal",
 					dataType: 'json',
 					type: 'post',
-					data: {id: id, csrf_eadev: csrf_hash},
+					data: {id: id, csrf_eadev_client: csrf_hash},
 					success: function(json) {
 						$('div.alert').remove();
 						if (json['error']) {

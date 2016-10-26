@@ -22,22 +22,22 @@
 <script src="<?= base_url(); ?>assets/msdropdown/js/msdropdown/jquery.dd.js"></script>
 <script type="text/javascript">
     function edit_jurnal(id,gid,count) {
-		
+
 		if(count==1){
 			showUrlInDialog(root + 'mod_verifikasi/setVoucher/' + id, "redirect_jurnal_json", "Pilih Voucher", "form_ganti_voucher");
 		} else {
 			redirect_jurnal(gid);
 		}
     }
-    
-    function redirect_jurnal_json(resp){		
+
+    function redirect_jurnal_json(resp){
         $.ajax({
             url: root + 'mod_verifikasi/edit_jurnal',
             type: 'post',
             dataType: 'json',
             data: {
                 nobukti: resp.nobukti,
-                csrf_eadev: csrf_hash
+                csrf_eadev_client: csrf_hash
             },
             beforeSend: function() {
                 $(this).attr('disabled', true);
@@ -65,15 +65,15 @@
             }
         });
 	}
-    
-    function redirect_jurnal(gid){		
+
+    function redirect_jurnal(gid){
         $.ajax({
             url: root + 'mod_verifikasi/edit_jurnal',
             type: 'post',
             dataType: 'json',
             data: {
                 nobukti: gid,
-                csrf_eadev: csrf_hash
+                csrf_eadev_client: csrf_hash
             },
             beforeSend: function() {
                 $(this).attr('disabled', true);
@@ -134,7 +134,7 @@
             url: root + "main/getjsonperiod",
             dataType: 'json',
             type: 'post',
-            data: {csrf_eadev: csrf_hash},
+            data: {csrf_eadev_client: csrf_hash},
             success: function(json) {
                 $('#ivansearch_val_' + id).msDropDown({byJson: {data: json, name: 'vals[]'}}).data("dd").setIndexByValue(selectedvalue);
             }
@@ -147,13 +147,13 @@
             url: root + "main/getBoolean",
             dataType: 'json',
             type: 'post',
-            data: {csrf_eadev: csrf_hash},
+            data: {csrf_eadev_client: csrf_hash},
             success: function(json) {
                 $('#ivansearch_val_' + id).msDropDown({byJson: {data: json, name: 'vals[]'}}).data("dd").setIndexByValue(selectedvalue);
             }
         });
     }
-    
+
 	function form_refresh_grid() {
         var data = $("form").serialize();
         jQuery("#list2").jqGrid('setGridParam', {
@@ -161,7 +161,7 @@
             page: 1
         }).trigger("reloadGrid");
     }
-    
+
     $(document).ready(function() {
         $('button[id="button_search"]').click(function() {
             var data = $("form").serialize();
@@ -170,7 +170,7 @@
                 page: 1
             }).trigger("reloadGrid");
         });
-		
+
 
         var panjang = $('.inbody').height() - 220;
         var lebar = $('.content').width() - 40;
@@ -178,7 +178,7 @@
             url: root + 'mod_verifikasi/JurnalToJson',
             mtype: "post",
             datatype: "json",
-            postData: {csrf_eadev: csrf_hash},
+            postData: {csrf_eadev_client: csrf_hash},
             colNames: ['No', "<div id='jq_checkbox_head_added'><div>", '#', 'Tanggal', 'Nomor Bukti', 'Nomor', 'Kode Proyek', 'Keterangan', 'COA', 'Rekanan', 'Debet', 'Kredit', 'IsApprove'],
             colModel: [
                 {name: 'no', index: 'id_jurnal', width: 25, sortable: false, align: "center"},
@@ -228,10 +228,10 @@
                 });
             }
         });
-        
+
         $('#form_verifikasi_delete').click(function() {
 			if (confirm('Apakah anda yakin untuk menghapus data tersebut?')) {
-    
+
 				var id = $('input[class="jq_checkbox_added"]:checked').map(function() {
 					return $(this).val();
 				}).get();
@@ -241,7 +241,7 @@
 					url: root + "mod_verifikasi/deletejurnal",
 					dataType: 'json',
 					type: 'post',
-					data: {id: id, csrf_eadev: csrf_hash},
+					data: {id: id, csrf_eadev_client: csrf_hash},
 					success: function(json) {
 						$('div.alert').remove();
 						if (json['error']) {

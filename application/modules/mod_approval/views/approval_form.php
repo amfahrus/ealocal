@@ -22,22 +22,22 @@
 <script src="<?= base_url(); ?>assets/msdropdown/js/msdropdown/jquery.dd.js"></script>
 <script type="text/javascript">
     function edit_jurnal(id,gid,count) {
-		
+
 		if(count==1){
 			showUrlInDialog(root + 'mod_approval/setVoucher/' + id, "redirect_jurnal_json", "Pilih Voucher", "form_ganti_voucher");
 		} else {
 			redirect_jurnal(gid);
 		}
     }
-    
-    function redirect_jurnal_json(resp){		
+
+    function redirect_jurnal_json(resp){
         $.ajax({
             url: root + 'mod_approval/edit_jurnal',
             type: 'post',
             dataType: 'json',
             data: {
                 nobukti: resp.nobukti,
-                csrf_eadev: csrf_hash
+                csrf_eadev_client: csrf_hash
             },
             beforeSend: function() {
                 $(this).attr('disabled', true);
@@ -65,15 +65,15 @@
             }
         });
 	}
-    
-    function redirect_jurnal(gid){		
+
+    function redirect_jurnal(gid){
         $.ajax({
             url: root + 'mod_approval/edit_jurnal',
             type: 'post',
             dataType: 'json',
             data: {
                 nobukti: gid,
-                csrf_eadev: csrf_hash
+                csrf_eadev_client: csrf_hash
             },
             beforeSend: function() {
                 $(this).attr('disabled', true);
@@ -134,7 +134,7 @@
             url: root + "main/getjsonperiod",
             dataType: 'json',
             type: 'post',
-            data: {csrf_eadev: csrf_hash},
+            data: {csrf_eadev_client: csrf_hash},
             success: function(json) {
                 $('#ivansearch_val_' + id).msDropDown({byJson: {data: json, name: 'vals[]'}}).data("dd").setIndexByValue(selectedvalue);
             }
@@ -147,7 +147,7 @@
             url: root + "main/getBoolean",
             dataType: 'json',
             type: 'post',
-            data: {csrf_eadev: csrf_hash},
+            data: {csrf_eadev_client: csrf_hash},
             success: function(json) {
                 $('#ivansearch_val_' + id).msDropDown({byJson: {data: json, name: 'vals[]'}}).data("dd").setIndexByValue(selectedvalue);
             }
@@ -162,9 +162,9 @@
                 page: 1
             }).trigger("reloadGrid");
         });
-		
+
         $('button[id="form_approve_jurnal"]').click(function() {
-			
+
 			var konfirmasi = $('<div></div>');
 			konfirmasi.addClass('form_approval_dialog_confirm');
 			konfirmasi.dialog({
@@ -262,8 +262,8 @@
 					$('div.form_approval_dialog_confirm').prepend('Apakah anda yakin untuk approve jurnal ini?');
 				}
 			}).dialog('open');
-			
-            
+
+
         });
 
         var panjang = $('.inbody').height() - 220;
@@ -272,7 +272,7 @@
             url: root + 'mod_approval/JurnalToJson',
             mtype: "post",
             datatype: "json",
-            postData: {csrf_eadev: csrf_hash},
+            postData: {csrf_eadev_client: csrf_hash},
             colNames: ['No', "<div id='jq_checkbox_head_added'><div>", '#', 'Tanggal', 'Nomor Bukti', 'Nomor', 'Kode Proyek', 'Keterangan', 'COA', 'Rekanan', 'Debet', 'Kredit', 'IsApprove'],
             colModel: [
                 {name: 'no', index: 'id_jurnal', width: 25, sortable: false, align: "center"},

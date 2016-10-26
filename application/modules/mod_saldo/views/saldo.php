@@ -2,7 +2,7 @@
 <div class="content form_saldoawal">
     <?= form_open(); ?>
     <input type="hidden" name="form_saldoawal_id" value="" />
-        
+
     <div class="row-fluid">
         <div class="span12">
             <div class="box">
@@ -14,12 +14,12 @@
 										<div class="row-fluid">
 											<label class="form-label span4">Pilih Periode</label>
 											<div class="span8 text">
-													<?= form_dropdown('periode_year', $op_yearperiode, set_value('periode_year'), 'class="span8"'); ?>	
+													<?= form_dropdown('periode_year', $op_yearperiode, set_value('periode_year'), 'class="span8"'); ?>
 											</div>
 										</div>
 									</div>
 								</div>
-								
+
 								<div class="row-fluid">
 									<div class="span12">
 										<div class="row-fluid">
@@ -30,7 +30,7 @@
 										</div>
 									</div>
 								</div>
-							
+
 					<table id="tabel_uraian" class="table table-bordered">
 						<tr>
 							<th>KODE</th>
@@ -46,7 +46,7 @@
 								<input type="hidden" name="form_saldoawal_dperkir_kode_bukubantu[]" class="form_saldoawal_dperkir_kode_bukubantu" id="form_saldoawal_dperkir_kode_bukubantu_1" />
 								<input type="hidden" name="is_sbdaya[]" class="is_sbdaya" id="is_sbdaya_1" />
 								<input type="hidden" name="is_rekanan[]" class="is_rekanan" id="is_rekanan_1" />
-								
+
 										<div class="control-group">
 											<div class="input-append">
 												<input type="text" onkeydown="thisrow=1;getautocomplete();" class="form_saldoawal_dperkir" id="form_saldoawal_dperkir_1" name="form_saldoawal_dperkir[]"/>
@@ -70,19 +70,19 @@
 										</div>
 								<!-- End blok dperkir -->
 							</td>
-							
+
 							<td>
 								<div class="control-group">
 									<input type="text" class="form_saldoawal_keterangan" id="form_saldoawal_keterangan_1" name="form_saldoawal_keterangan[]" autocomplete="off">
 								</div>
 							</td>
-							
+
 							<td>
 								<div class="control-group">
 									<input type="text" id="form_saldoawal_debet_1" name="form_saldoawal_debet[]" class="form_saldoawal_debet" autocomplete="off"/>
 								</div>
 							</td>
-							
+
 							<td>
 								<div class="control-group">
 									<input type="text" id="form_saldoawal_kredit_1" name="form_saldoawal_kredit[]" class="form_saldoawal_kredit" autocomplete="off"/>
@@ -120,14 +120,14 @@
 	var rowCount=1;
 	function addItem()
 	{
-		rowCount++; 
+		rowCount++;
 		var tbl = document.getElementById("tabel_uraian");
 		var lastRow = tbl.rows.length;
-		
+
 		if(rowCount < 101) {
-		
+
 		var row = tbl.insertRow(lastRow);
-		
+
 		//var newCell = row.insertCell(0);
 		//newCell.innerHTML = "<tr><td><span class=\"nomor\" id=\"nomor_"+rowCount+"\">"+rowCount+"</span></td>";
 
@@ -137,7 +137,7 @@
 								+"<input type=\"hidden\" name=\"form_saldoawal_dperkir_kode[]\" class=\"form_saldoawal_dperkir_kode\" id=\"form_saldoawal_dperkir_kode_"+rowCount+"\" />"
 								+"<input type=\"hidden\" name=\"form_saldoawal_dperkir_kode_bukubantu[]\" class=\"form_saldoawal_dperkir_kode_bukubantu\" id=\"form_saldoawal_dperkir_kode_bukubantu_"+rowCount+"\" />"
 								+"<input type=\"hidden\" name=\"is_sbdaya[]\" class=\"is_sbdaya\" id=\"is_sbdaya_"+rowCount+"\" />"
-								+"<input type=\"hidden\" name=\"is_rekanan[]\" class=\"is_rekanan\" id=\"is_rekanan_"+rowCount+"\" />"								
+								+"<input type=\"hidden\" name=\"is_rekanan[]\" class=\"is_rekanan\" id=\"is_rekanan_"+rowCount+"\" />"
 										+"<div class=\"control-group\">"
 											+"<div class=\"input-append\">"
 												+"<input type=\"text\" onkeydown=\"thisrow="+rowCount+";getautocomplete();\" class=\"form_saldoawal_dperkir ui-autocomplete-input\" id=\"form_saldoawal_dperkir_"+rowCount+"\" name=\"form_saldoawal_dperkir[]\"  autocomplete=\"off\" role=\"textbox\" aria-autocomplete=\"list\" aria-haspopup=\"true\"/>"
@@ -160,28 +160,28 @@
 											+"</div>"
 										+"</div>"
 							+"</td>";
-		
+
 		var newCell = row.insertCell(1);
 		newCell.innerHTML = "<tr><td><div class=\"control-group\"><input type=\"text\" class=\"form_saldoawal_keterangan\" id=\"form_saldoawal_keterangan_"+rowCount+"\" name=\"form_saldoawal_keterangan[]\" autocomplete=\"off\"></div></td>";
-		
+
 		var newCell = row.insertCell(2);
 		newCell.innerHTML = "<td>"
 								+"<div class=\"control-group\">"
 									+"<input type=\"text\" id=\"form_saldoawal_debet_"+rowCount+"\" name=\"form_saldoawal_debet[]\" class=\"form_saldoawal_debet\" autocomplete=\"off\"/>"
 								+"</div>"
 							+"</td>";
-				
+
 		var newCell = row.insertCell(3);
 		newCell.innerHTML = "<td>"
 								+"<div class=\"control-group\">"
 									+"<input type=\"text\" id=\"form_saldoawal_kredit_"+rowCount+"\" name=\"form_saldoawal_kredit[]\" class=\"form_saldoawal_kredit\" autocomplete=\"off\"/>"
 								+"</div>"
 							+"</td>";
-							
+
 		var newCell = row.insertCell(4);
 		newCell.innerHTML ="<td><button type=\"button\" onclick=\"addItem();\" class=\"btn btn-primary add_item\"><i class=\"icon-plus icon-white\"></I></button>"
 							+"<button id=\"remove_item_"+rowCount+"\" type=\"button\" class=\"btn btn-danger\" onclick=\"removeItem(" + rowCount + ")\" ><i class=\"icon-remove icon-white\"></I></button><td></tr>"
-		
+
 		row.setAttribute("id", "item_" + rowCount);
 		$('#form_saldoawal_dperkir_bukubantu_area_'+rowCount).hide();
         $('input[id="form_saldoawal_debet_'+rowCount+'"]').number(true, 2);
@@ -189,7 +189,7 @@
 		} else {
 			alert("Maximal 100 Item");
 		}
-		
+
 	}
 	function removeItem(id) {
 		var tbl = document.getElementById("tabel_uraian");
@@ -231,7 +231,7 @@
                     $('input[name="form_memorial_no_dokumen"]').val(json["no_dokumen"]);
                     $('input[name="form_memorial_tanggal"]').val(json["tanggal"]);
                     $('input[name="form_memorial_jenis"]').val(json["jenis_transaksi"]);
-					
+
 					$.each(json["kredit"], function(i, item) {
 						$('input[id="form_memorial_debet_id_'+i+'"]').val(json["debet"][i]["dperkir_id"]);
 						$('input[id="form_memorial_debet_kode_'+i+'"]').val(json["debet"][i]["kdperkiraan"]);
@@ -265,7 +265,7 @@
 							addItem();
 						}
 					})
-					
+
                     bukubantu();
                 }
                 scrollup();
@@ -351,9 +351,9 @@
         $('input[id="form_saldoawal_dperkir_kode_'+thisrow+'"]').val(json.kdperkiraan);
         $('.popup_kodeperkiraan').dialog('close');
         $('input[id="form_saldoawal_dperkir_bukubantu_'+thisrow+'"]').focus();
-        
+
         if (json.flag_sumberdaya === 't') {
-			$('input[id="is_sbdaya_'+thisrow+'"]').val(json.flag_sumberdaya);			
+			$('input[id="is_sbdaya_'+thisrow+'"]').val(json.flag_sumberdaya);
 			$('#form_saldoawal_dperkir_bukubantu_area_'+thisrow+'').show();
 		} else {
 			$('input[id="is_sbdaya_'+thisrow+'"]').val("");
@@ -381,11 +381,11 @@
 
         $('input[id="form_saldoawal_dperkir_'+thisrow+'"]').autocomplete({
             minLength: 2,
-			matchContains:false, 
-			minChars:1,  
-			autoFill:false, 
-			mustMatch:true, 
-			cacheLength:20, 
+			matchContains:false,
+			minChars:1,
+			autoFill:false,
+			mustMatch:true,
+			cacheLength:20,
 			max:20,
             source: root + "mod_kdperkiraan/autocomplete_kodeperkiraan",
             create: function(event, ui) {
@@ -418,7 +418,7 @@
                         $('#form_saldoawal_dperkir_bukubantu_area_'+thisrow).show();
                         $('input[id="is_sbdaya_'+thisrow+'"]').val("");
                     }
-                    
+
                     if (ui.item.flag_sumberdaya === null && ui.item.flag_nasabah === null){
 						$('#form_saldoawal_dperkir_bukubantu_area_'+thisrow).hide();
                         $('input[id="is_rekanan_'+thisrow+'"]').val("");
@@ -448,7 +448,7 @@
             }
         });
 	}
-	
+
 	function getListBukuBantu(){
 		var is_sbdaya = $('input[id="is_sbdaya_'+thisrow+'"]').val();
 		var is_rekanan = $('input[id="is_rekanan_'+thisrow+'"]').val();
@@ -465,7 +465,7 @@
 		}
 
 	}
-	
+
 	function getAddBukuBantu(){
 		var is_sbdaya = $('input[id="is_sbdaya_'+thisrow+'"]').val();
 		var is_rekanan = $('input[id="is_rekanan_'+thisrow+'"]').val();
@@ -480,7 +480,7 @@
 			return false;
 		}
 	}
-	
+
     function form_saldoawal_clear() {
         $('div.alert').remove();
         $('input[name="form_saldoawal_id"]').val("");
@@ -498,29 +498,29 @@
 			removeItem(rowCount);
 		}
     }
-	
+
 	function getDataPeriode(id) {
         $.ajax({
             url: root + 'mod_saldo/getDataPeriode',
             type: 'post',
-            data: { id: id, csrf_eadev: csrf_hash},
+            data: { id: id, csrf_eadev_client: csrf_hash},
             success: function(data) {
                 $('#periode').html(data);
             }
-        });	
+        });
     }
-    
+
     $('select[name="periode_year"]').change(function() {
         var id =  $('select[name="periode_year"]').val();
         getDataPeriode(id);
     });
-    
+
     $(function() {
         var id_periodeyear = $('select[name="periode_year"]').val();
         getDataPeriode(id_periodeyear);
-        
+
     });
-	
+
     /* begin document ready */
     $(document).ready(function() {
 		$('#form_saldoawal_dperkir_bukubantu_area_1').hide();
@@ -568,7 +568,7 @@
                     kredit: saldoawal_kredit,
                     is_rekanan: is_rekanan,
                     is_sbdaya: is_sbdaya,
-					csrf_eadev: csrf_hash
+					csrf_eadev_client: csrf_hash
                 },
                 beforeSend: function() {
                     $(this).attr('disabled', true);
@@ -602,13 +602,13 @@
                 url: root + "mod_saldo/addJurnal",
                 dataType: 'json',
                 type: 'post',
-                data: {id: id, csrf_eadev: csrf_hash},
+                data: {id: id, csrf_eadev_client: csrf_hash},
                 beforeSend: function() {
                     $(this).attr('disabled',true);
-                },	
+                },
                 complete: function() {
                     $(this).attr('disabled',false);
-                },	
+                },
                 success: function(json) {
                     $('div.alert').remove();
                     if (json['error']) {
@@ -623,14 +623,14 @@
                 }
             });
         });
-		
+
 		$('button[name="form_saldoawal_batal"]').click(function() {
             $.ajax({
                 url: root + "mod_saldo/cleanTransaksi"
             });
             form_saldo_clear();
         });
-		
+
         $('#form_saldoawal_delete').click(function() {
             var id = $('input[class="jq_checkbox_added"]:checked').map(function() {
                 return $(this).val();
@@ -641,7 +641,7 @@
                 url: root + "mod_saldo/deletejurnal",
                 dataType: 'json',
                 type: 'post',
-                data: {id: id, csrf_eadev: csrf_hash},
+                data: {id: id, csrf_eadev_client: csrf_hash},
                 success: function(json) {
                     $('div.alert').remove();
                     if (json['error']) {

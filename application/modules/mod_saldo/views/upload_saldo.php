@@ -80,7 +80,7 @@ function getDataPeriode(id) {
       $.ajax({
           url: root + 'mod_saldo/getDataPeriode',
           type: 'post',
-          data: { id: id, csrf_eadev: csrf_hash},
+          data: { id: id, csrf_eadev_client: csrf_hash},
           success: function(data) {
               $('#periode').html(data);
           }

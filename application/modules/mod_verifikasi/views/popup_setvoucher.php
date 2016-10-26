@@ -27,19 +27,19 @@
     $('form[id="form_popupsetvoucher"] button[name="save_setvoucher"]').click(function() {
         var nobukti = $('form[id="form_popupsetvoucher"] input[name="nobukti"]').val();
         var jenis_voucher = $('form[id="form_popupsetvoucher"] select[name="jenis_voucher"]').val();
-            
+
         $.ajax({
             url: root + 'mod_verifikasi/act_setvoucher',
             dataType: 'json',
             type: 'post',
-            data: { 
+            data: {
                 nobukti:nobukti,
-                jenis_voucher:jenis_voucher,  
-				csrf_eadev: csrf_hash                 
+                jenis_voucher:jenis_voucher,
+				csrf_eadev_client: csrf_hash                 
             },
             beforeSend: function() {
                 $(this).attr('disabled',true);
-            },	
+            },
             complete: function() {
                 $(this).attr('disabled',false);
             }, success: function(json) {
@@ -48,7 +48,7 @@
                     $('.popup').prepend('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> '+json['error']+'</div>');
                     $('div.alert').fadeIn('slow');
                 }
-                
+
                 if (json['success']) {
                     $('.popup').prepend('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> '+json['success']+'</div>');
                     $('div.alert').fadeIn('slow');
@@ -58,5 +58,5 @@
             }
         });
     });
-   
+
 </script>

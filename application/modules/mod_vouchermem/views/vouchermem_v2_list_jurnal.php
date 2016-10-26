@@ -28,7 +28,7 @@
             dataType: 'json',
             data: {
                 nobukti: gid,
-				csrf_eadev: csrf_hash
+				csrf_eadev_client: csrf_hash
             },
             beforeSend: function() {
                 $(this).attr('disabled', true);
@@ -89,7 +89,7 @@
             url: root + "main/getjsonperiod",
             dataType: 'json',
             type: 'post',
-            data: {csrf_eadev: csrf_hash},
+            data: {csrf_eadev_client: csrf_hash},
             success: function(json) {
                 $('#ivansearch_val_' + id).msDropDown({byJson: {data: json, name: 'vals[]'}}).data("dd").setIndexByValue(selectedvalue);
             }
@@ -102,7 +102,7 @@
             url: root + "main/getBoolean",
             dataType: 'json',
             type: 'post',
-            data: {csrf_eadev: csrf_hash},
+            data: {csrf_eadev_client: csrf_hash},
             success: function(json) {
                 $('#ivansearch_val_' + id).msDropDown({byJson: {data: json, name: 'vals[]'}}).data("dd").setIndexByValue(selectedvalue);
             }
@@ -124,7 +124,7 @@
             url: root + 'mod_vouchermem/JurnalToJson',
             mtype: "post",
             datatype: "json",
-            postData: {csrf_eadev: csrf_hash},
+            postData: {csrf_eadev_client: csrf_hash},
             colNames: ['No', "<div id='jq_checkbox_head_added'><div>", '#', 'Tanggal', 'Nomor Bukti', 'Nomor Dokumen', 'Kode Proyek', 'Keterangan', 'COA', 'Rekanan', 'Debet', 'Kredit', 'IsApprove'],
             colModel: [
                 {name: 'no', index: 'id_jurnal', width: 25, sortable: false, align: "center"},
@@ -174,10 +174,10 @@
                 });
             }
         });
-        
+
         $('#form_vouchermem_delete').click(function() {
 			if (confirm('Apakah anda yakin untuk menghapus data tersebut?')) {
-    
+
 				var id = $('input[class="jq_checkbox_added"]:checked').map(function() {
 					return $(this).val();
 				}).get();
@@ -187,7 +187,7 @@
 					url: root + "mod_vouchermem/deletejurnal",
 					dataType: 'json',
 					type: 'post',
-					data: {id: id, csrf_eadev: csrf_hash},
+					data: {id: id, csrf_eadev_client: csrf_hash},
 					success: function(json) {
 						$('div.alert').remove();
 						if (json['error']) {
