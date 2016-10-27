@@ -76,7 +76,7 @@
                     dataType:'json',
                     data:{
                         item: id,
-						csrf_eadev: csrf_hash
+						csrf_eadev_client: csrf_hash
                     },
                     beforeSend: function() {
                         $(this).attr('disabled',true);
