@@ -36,7 +36,7 @@ class importdata_model extends CI_Model {
 							$sql .= $this->getProyek($v['values'],$data['kode_proyek']);
 						}
 						break;
-					case 'tbl_sbdaya':
+					/*case 'tbl_sbdaya':
 						if (array_key_exists('values', $v)){
 							//print_r($v['values']);
 							$sql .= $this->getSBDaya($v['values'],$data['kode_proyek']);
@@ -53,7 +53,7 @@ class importdata_model extends CI_Model {
 							//print_r($v['values']);
 							$sql .= $this->getBukuBantu($v['values'],$data['kode_proyek']);
 						}
-						break;
+						break;*/
 				}
 
 			}

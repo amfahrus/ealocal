@@ -19,13 +19,13 @@ class exportdata_model extends CI_Model {
         $tmp['period_key'] = $period_key;
         //$tmp['yearperiod'] = $this->getYearPeriod($id_proyek, $period_key);
         $tmp['tbl_jurnal'] = $this->getJurnal($id_proyek, $period_key);
-        //$tmp['tbl_bukubantu'] = $this->getBukuBantu($id_proyek);
+        $tmp['tbl_bukubantu'] = $this->getBukuBantu($id_proyek);
         $tmp['saldo_awal_detail'] = $this->getSaldoAwalDetail($id_proyek, $period_key);
         $tmp['saldo_perekanan'] = $this->getSaldoPerekanan($id_proyek, $period_key);
         $tmp['tbl_dperkir_group_saldo'] = $this->getGroupSaldo($id_proyek, $period_key);
         $tmp['trialbal'] = $this->getTrialbal($id_proyek, $period_key);
-        //$tmp['tbl_rekanan'] = $this->getRekanan($id_proyek);
-        //$tmp['tbl_sbdaya'] = $this->getSBDaya($id_proyek);
+        $tmp['tbl_rekanan'] = $this->getRekanan($id_proyek);
+        $tmp['tbl_sbdaya'] = $this->getSBDaya($id_proyek);
         //die(print_r($tmp));
         return $tmp;
 	}

@@ -6,9 +6,17 @@
         <div class="span12">
             <div class="row-fluid">
                 <div class="control-group info">
+                    <label class="control-label" for="type_rekanan">Tipe</label>
+                    <div class="controls">
+                        <?= form_dropdown('type_rekanan', $type_rekanan, $detail["type_rekanan"], 'id="type_rekanan"'); ?>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="control-group info">
                     <label class="control-label" for="kode_rekanan">Kode Rekanan</label>
                     <div class="controls">
-                        <input class="span8 text" type="text" id="kode_rekanan" name="kode_rekanan" value="<?= $detail["kode_rekanan"]; ?>" autocomplete="off" />
+                        <input class="span8 text" type="text" id="kode_rekanan" name="kode_rekanan" value="<?= $detail["kode_rekanan"]; ?>" readonly autocomplete="off" />
                     </div>
                 </div>
             </div>
@@ -20,6 +28,30 @@
                     </div>
                 </div>
             </div>
+            <div class="row-fluid">
+                <div class="control-group info">
+                    <label class="control-label" for="id_card">NPWP</label>
+                    <div class="controls">
+                        <input class="span8 text" type="text" id="id_card" name="id_card" value="<?= set_value('id_card'); ?>" autocomplete="off" />
+                    </div>
+                </div>
+            </div>
+			<div class="row-fluid">
+				<div class="control-group info">
+					<label class="control-label" for="nomor_kontrak">Nomor Kontrak</label>
+					<div class="controls">
+						<input class="span8 text" type="text" id="nomor_kontrak" name="nomor_kontrak" value="<?= $detail["nomor_kontrak"]; ?>" autocomplete="off" />
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="control-group info">
+					<label class="control-label" for="nilai_kontrak">Nilai Kontrak</label>
+					<div class="controls">
+						<input class="span8 text" type="text" id="nilai_kontrak" name="nilai_kontrak" value="<?= $detail["nilai_kontrak"]; ?>" autocomplete="off" />
+					</div>
+				</div>
+			</div>
             <div class="row-fluid">
                 <div class="control-group info">
                     <label class="control-label" for="nama_kontak">Nama Kontak</label>
@@ -62,14 +94,6 @@
             </div>
             <div class="row-fluid">
                 <div class="control-group info">
-                    <label class="control-label" for="type_rekanan">Tipe</label>
-                    <div class="controls">
-                        <?= form_dropdown('type_rekanan', $type_rekanan, $detail["type_rekanan"], 'id="type_rekanan"'); ?>
-                    </div>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="control-group info">
                     <label class="control-label" for="type_rekanan">Kode Perkiraan</label>
                     <div class="controls">
                         <?= form_multiselect('kode_perkiraan[]', $kode_perkiraan, $selected, 'class="span8 chzn-select"'); ?>
@@ -93,9 +117,21 @@
 <script type="text/javascript" src="<?= base_url(); ?>assets/choosen/chosen.jquery.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        
+
         $('.chzn-select').chosen({});
-        
+
+        $('input[id="nilai_kontrak"]').number(true, 2);
+
+		$('select[name="type_rekanan"]').change(function() {
+			$.ajax({
+                url: root + 'mod_rekanan/get_koderekanan/'+$('select[name="type_rekanan"]').val(),
+                type: 'get',
+                success: function(data) {
+                    $('input[name="kode_rekanan"]').val(data);
+                }
+            });
+		});
+
         $('button[name="form_rekanan_save"]').bind('click', function() {
             $.ajax({
                 url : root + 'mod_rekanan/rekanan_edit',

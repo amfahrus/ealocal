@@ -7,6 +7,7 @@
         var lastsel;
         jQuery("#list2").jqGrid({
             datatype: "local",
+            postData: {csrf_eadev: csrf_hash},
             colNames:['','Kode Perusahaan','Nama Perusahaan', 'Telp. Perusahaan','Nama Kontak','Alamat','Telp. Kontak','Kota', 'Tipe Rekanan', 'Status', 'Keterangan', 'Kode Perkiraan',''], 
             colModel:[
                 {name:'id_proyek', index:'id_proyek', hidden:true,width:50},
@@ -98,7 +99,7 @@
 					url: root+"mod_rekanan/send_import",
 					data : {
 						jqGridData: postData,
-						csrf_eadev_client: csrf_hash
+						csrf_eadev: csrf_hash
 					}
 				}).done(function() {
 					alert('Data berhasil disimpan!');

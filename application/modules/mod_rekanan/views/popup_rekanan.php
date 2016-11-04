@@ -43,7 +43,7 @@
             dataType:'json',
             data:{
                 item: id,
-                csrf_eadev_client: csrf_hash
+                csrf_eadev: csrf_hash
             },
             beforeSend: function() {
                 $(this).attr('disabled',true);
@@ -76,16 +76,16 @@
             var nama_rekanan = $('input[name="popup_namarekanan"]').val();
             var search = "_search=true&kode_rekanan="+kode_rekanan+"&nama_rekanan="+nama_rekanan;
             jQuery("#list2").jqGrid('setGridParam',{
-                url: root + 'mod_rekanan/popup_json/<?php echo $coa? $coa : 0; ?>'+ search,
+                url: root + 'mod_rekanan/popup_json/<?php echo $coa? $coa : 0; ?>?'+ search,
                 page:1
             }).trigger("reloadGrid");
         });
         
         jQuery("#list2").jqGrid({
-            url: root + 'mod_rekanan/popup_json/'+<?php echo $coa? $coa : 0; ?>, 
+            url: root + 'mod_rekanan/popup_json/<?php echo $coa? $coa : 0; ?>', 
             mtype : "post",
             datatype: "json", 
-            postData: {csrf_eadev_client: csrf_hash},
+            postData: {csrf_eadev: csrf_hash},
             colNames:['#', '#', 'Kode Rekanan', 'Nama Rekanan'], 
             colModel:[ 
                 {name:'act',index:'act', width:80, align:"center", sortable:false}, 

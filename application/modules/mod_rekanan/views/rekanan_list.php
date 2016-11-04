@@ -25,7 +25,7 @@
             url: root + 'mod_rekanan/rekanan_json', 
             mtype : "post",
             datatype: "json", 
-            postData: {csrf_eadev_client: csrf_hash},
+            postData: {csrf_eadev: csrf_hash},
             colNames:['id_rekanan','Proyek', 'Tipe','Kode Rekanan', 'Nama Rekanan',''], 
             colModel:[ 
                 {name:'id_rekanan',index:'id_rekanan',hidden:true, width:100}, 
@@ -74,7 +74,7 @@
                 $.ajax({
                     url: root + 'mod_rekanan/rekanan_delete',
                     type: 'post',
-                    data: { id: id, csrf_eadev_client: csrf_hash},
+                    data: { id: id, csrf_eadev: csrf_hash},
                     success: function(json) {
                         jQuery("#list2").jqGrid().trigger('reloadGrid');
                     }

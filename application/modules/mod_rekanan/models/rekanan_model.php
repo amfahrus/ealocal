@@ -131,6 +131,31 @@ class rekanan_model extends CI_Model {
         return $temp_result;
     }
 
+	private function getKetRekanan($id) {
+
+        $this->db->select('keterangan');
+        $this->db->from($this->_table['library']);
+        $this->db->where('id_library',$id);
+        $query = $this->db->get();
+		if($query->num_rows() > 0){
+			$row = $query->row_array();
+			return $row['keterangan'];
+        } else {
+			return NULL;
+		}
+    }
+
+	public function getKodeRekanan($id,$id_proyek) {
+		$kd = $this->getKetRekanan($id);
+        $query = $this->db->query("select seq_kdrek_get(" . $id_proyek . ") as kdrek");
+        if ($query->num_rows() > 0) {
+            $row = $query->row_array();
+            return $kd.$row['kdrek'];
+        } else {
+            return false;
+        }
+    }
+
     public function getIdLibrary($nama) {
 
         $this->db->select('b.id_library, b.nama_library');
@@ -211,6 +236,12 @@ class rekanan_model extends CI_Model {
         $this->db->insert_batch('tbl_bukubantu', $data);
         $this->db->trans_complete();
 
+        if ($this->db->trans_status() === TRUE) {
+            return true;
+        } else {
+            return false;
+        }
+
         $this->dataset_db->insert_logs(
 										array(
 											'log_username' => $this->session->userdata('ba_username'),
@@ -219,15 +250,11 @@ class rekanan_model extends CI_Model {
 											'log_params' => json_encode($data)
 										)
 									  );
-        if ($this->db->trans_status() === TRUE) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function insertImport($data) {
         $this->db->insert_batch($this->_table['tbl_rekanan'], $data);
+        //return $this->db->insert_id();
         $this->dataset_db->insert_logs(
 										array(
 											'log_username' => $this->session->userdata('ba_username'),
@@ -236,7 +263,6 @@ class rekanan_model extends CI_Model {
 											'log_params' => json_encode($data)
 										)
 									  );
-        //return $this->db->insert_id();
     }
 
     function PopupGetAll($limit, $offset, $sidx, $sord, $cari, $search, $id, $coa) {
@@ -260,8 +286,8 @@ class rekanan_model extends CI_Model {
             $this->db->where_in('id_subunitkerja', json_decode($this->session->userdata('ba_hak_data')));
         } else {
             $this->db->where_in('id_proyek', json_decode($this->session->userdata('ba_hak_data')));
-        }
-        $this->db->where('id_proyek', $id);*/
+        }*/
+        $this->db->where('id_proyek', $id);
         $this->_countAll = $this->db->count_all_results();
         $this->db->select('id_rekanan, kode_rekanan, nama_rekanan');
         $this->db->order_by($sidx, $sord);
@@ -370,6 +396,8 @@ class rekanan_model extends CI_Model {
                 'id_proyek' => $row['id_proyek'],
                 'kode_rekanan' => $row['kode_rekanan'],
                 'nama_rekanan' => $row['nama_rekanan'],
+                'nomor_kontrak' => $row['nomor_kontrak'],
+                'nilai_kontrak' => $row['nilai_kontrak'],
                 'alamat' => $row['alamat'],
                 'kota' => $row['kota'],
                 'telp_rekanan' => $row['telp_rekanan'],

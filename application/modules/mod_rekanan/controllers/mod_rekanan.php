@@ -29,9 +29,9 @@ class mod_rekanan extends CI_Controller {
     public function index() {
         $this->toolbar->create_toolbar();
         $this->toolbar->cGroupButton();
-        $this->toolbar->addLink("", "btn tooltips", base_url() . "mod_rekanan", "form_rekanan_list", "cus-application", "List Data User", "tooltip", "right");
-        $this->toolbar->addLink("", "btn tooltips", base_url() . "mod_rekanan/form_rekanan_add", "form_rekanan_new", "cus-application-form-add", "Tambah User", "tooltip", "right");
-        $this->toolbar->addLink("", "btn tooltips", "#", "form_rekanan_delete", "cus-application-form-delete", "Delete User", "tooltip", "right");
+        $this->toolbar->addLink("", "btn tooltips", base_url() . "mod_rekanan", "form_rekanan_list", "cus-application", "List Data Rekanan", "tooltip", "right");
+        $this->toolbar->addLink("", "btn tooltips", base_url() . "mod_rekanan/form_rekanan_add", "form_rekanan_new", "cus-application-form-add", "Tambah Rekanan", "tooltip", "right");
+        $this->toolbar->addLink("", "btn tooltips", "#", "form_rekanan_delete", "cus-application-form-delete", "Delete Rekanan", "tooltip", "right");
         $this->toolbar->eGroupButton();
 //        $this->toolbar->cGroupButton();
 //        $this->toolbar->addLink("", "btn tooltips", base_url() . "mod_rekanan/from_excel", "form_rekanan_import_xls", "cus-page-white-excel", "Import Data Excel", "tooltip", "right");
@@ -171,7 +171,7 @@ class mod_rekanan extends CI_Controller {
 
         if (!$sidx)
             $sidx = 1;
-		
+
         $query = $this->rekanan_model->PopupGetAll($limit, $offset, $sidx, $sord, $cari, $search, $this->_userconfig["kolom2"], $coa);
         $count = $this->rekanan_model->PopupCountAll();
 
@@ -216,7 +216,8 @@ class mod_rekanan extends CI_Controller {
 //        $this->toolbar->eGroupButton();
         $data['toolbars'] = $this->toolbar->generate();
 		$userconfig = $this->dataset_db->getUserconfig($this->session->userdata('ba_user_id'));
-        $data["kode_perkiraan"] = $this->site_library->getKodePerkiraan($userconfig["kolom2"]);
+        //$data["kode_perkiraan"] = $this->site_library->getKodePerkiraan($userconfig["kolom2"]);
+        $data["kode_perkiraan"] = $this->site_library->getKodePerkiraanAll();
         $data['ptitle'] = "Master Rekanan";
         $data['navs'] = $this->dataset_db->buildNav(0);
         $tabs = $this->session->userdata('tabs');
@@ -248,10 +249,13 @@ class mod_rekanan extends CI_Controller {
         if ($this->form_validation->run() == TRUE) {
             $userconfig = $this->dataset_db->getUserconfig($this->session->userdata('ba_user_id'));
             $kode_perkiraan = $this->input->post('kode_perkiraan');
-
+            $nilai_kontrak = $this->input->post("nilai_kontrak");
             $field["kode_rekanan"] = $this->input->post("kode_rekanan");
             $field["nama_rekanan"] = $this->input->post("nama_rekanan");
+            $field["id_card"] = $this->input->post("id_card");
             $field["nama_kontak"] = $this->input->post("nama_kontak");
+            $field["nomor_kontrak"] = $this->input->post("nomor_kontrak");
+            $field["nilai_kontrak"] = (empty($nilai_kontrak) ? NULL : $nilai_kontrak);
             $field["alamat"] = $this->input->post("alamat");
             $field["kota"] = $this->input->post("kota");
             $field["telp_rekanan"] = $this->input->post("telp_rekanan");
@@ -264,7 +268,7 @@ class mod_rekanan extends CI_Controller {
             $insert = $this->rekanan_model->insert($field);
 
             $temp_result = array();
-           
+
 			foreach ($kode_perkiraan as $value) {
 				$temp_result[] = array(
 					'bukubantu_id_proyek' => $userconfig["kolom2"],
@@ -382,7 +386,7 @@ class mod_rekanan extends CI_Controller {
     public function rekanan_edit() {
         $this->form_validation->set_rules("kode_rekanan", "Kode Rekanan", "required|xss_clean");
         $this->form_validation->set_rules("nama_rekanan", "Nama Rekanan", "required|xss_clean");
-        $this->form_validation->set_rules("nama_kontak", "Nama Kontak", "required|xss_clean");
+        $this->form_validation->set_rules("nama_kontak", "Nama Kontak", "xss_clean");
         $this->form_validation->set_rules("alamat", "Alamat", "xss_clean");
         $this->form_validation->set_rules("kota", "Kota", "xss_clean");
         $this->form_validation->set_rules("telp_rekanan", "Telp Rekanan", "xss_clean");
@@ -396,7 +400,10 @@ class mod_rekanan extends CI_Controller {
             $id = $this->input->post("id");
             $field["kode_rekanan"] = $this->input->post("kode_rekanan");
             $field["nama_rekanan"] = $this->input->post("nama_rekanan");
+            $field["id_card"] = $this->input->post("id_card");
             $field["nama_kontak"] = $this->input->post("nama_kontak");
+            $field["nomor_kontrak"] = $this->input->post("nomor_kontrak");
+            $field["nilai_kontrak"] = $this->input->post("nilai_kontrak");
             $field["alamat"] = $this->input->post("alamat");
             $field["kota"] = $this->input->post("kota");
             $field["telp_rekanan"] = $this->input->post("telp_rekanan");
@@ -523,6 +530,13 @@ class mod_rekanan extends CI_Controller {
         $this->load->view('template/ajax', $json);
     }
 
+	public function get_koderekanan($id) {
+        $userconfig = $this->dataset_db->getUserconfig($this->session->userdata('ba_user_id'));
+        $res = $this->rekanan_model->getKodeRekanan($id,$userconfig["kolom2"]);
+        //die(var_dump($res));
+        echo $res;
+    }
+
     public function popup_rekanan_add() {
         $this->form_validation->set_rules("unitkerja", "unitkerja", "required|xss_clean");
         $this->form_validation->set_rules("kode_rekanan", "kode_rekanan", "required|xss_clean|callback_checkKodeRekanan");
@@ -536,17 +550,21 @@ class mod_rekanan extends CI_Controller {
         $this->form_validation->set_rules("kode_proyek", "kode_proyek", "required|xss_clean");
 
         if ($this->form_validation->run() == TRUE) {
+			$nilai_kontrak = $this->input->post("nilai_kontrak");
             $field["kode_rekanan"] = $this->input->post("kode_rekanan");
             $field["nama_rekanan"] = $this->input->post("nama_rekanan");
-            //$field["nama_kontak"] = $this->input->post("nama_kontak");
-            //$field["alamat"] = $this->input->post("alamat");
-            //$field["kota"] = $this->input->post("kota");
-            //$field["telp_rekanan"] = $this->input->post("telp_rekanan");
-            //$field["telp_kontak"] = $this->input->post("telp_kontak");
-            //$field["type_rekanan"] = (int) $this->input->post("type_rekanan");
+            $field["id_card"] = $this->input->post("id_card");
+            $field["nama_kontak"] = $this->input->post("nama_kontak");
+            $field["nomor_kontrak"] = $this->input->post("nomor_kontrak");
+            $field["nilai_kontrak"] = (empty($nilai_kontrak) ? NULL : $nilai_kontrak);
+            $field["alamat"] = $this->input->post("alamat");
+            $field["kota"] = $this->input->post("kota");
+            $field["telp_rekanan"] = $this->input->post("telp_rekanan");
+            $field["telp_kontak"] = $this->input->post("telp_kontak");
+            $field["type_rekanan"] = (int) $this->input->post("type_rekanan");
             $field["id_proyek"] = (int) $this->input->post("kode_proyek");
-            //$field["create_id"] = (int) $this->session->userdata('ba_user_id');
-            //$field["create_time"] = $this->myauth->timestampIndo();
+            $field["create_id"] = (int) $this->session->userdata('ba_user_id');
+            $field["create_time"] = $this->myauth->timestampIndo();
 
             $insert = $this->rekanan_model->insert($field);
             if ($insert) {
@@ -656,7 +674,7 @@ class mod_rekanan extends CI_Controller {
 //        $this->toolbar->addLink("", "btn tooltips", base_url() . "mod_rekanan/to_excel", "form_rekanan_export_xls", "cus-page-excel", "Eksport Data Excel", "tooltip", "right");
 //        $this->toolbar->eGroupButton();
         $data['toolbars'] = $this->toolbar->generate();
-        
+
         $data['ptitle'] = "Master Rekanan";
         $data['navs'] = $this->dataset_db->buildNav(0);
         $tabs = $this->session->userdata('tabs');
