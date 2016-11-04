@@ -147,7 +147,7 @@ class rekanan_model extends CI_Model {
 
 	public function getKodeRekanan($id,$id_proyek) {
 		$kd = $this->getKetRekanan($id);
-        $query = $this->db->query("select seq_kdrek_get(" . $id_proyek . ") as kdrek");
+        $query = $this->db->query("select seq_kdrek_get(" . $id_proyek . "," . $id . ") as kdrek");
         if ($query->num_rows() > 0) {
             $row = $query->row_array();
             return $kd.$row['kdrek'];
