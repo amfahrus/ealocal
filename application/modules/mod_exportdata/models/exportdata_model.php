@@ -84,7 +84,7 @@ class exportdata_model extends CI_Model {
 
 		$this->db->select("*");
 		$this->db->from("tbl_jurnal");
-		$this->db->where("id_proyek",$id_proyek);
+		//$this->db->where("id_proyek",$id_proyek);
 		$this->db->where("tanggal >=",$period['period_start']);
 		$this->db->where("tanggal <=",$period['period_end']);
 		$query = $this->db->get();
